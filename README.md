@@ -43,6 +43,10 @@ This Ansible role requests via the Satellite API the generation of this command 
 | Force | satellite_registration_command_force | Boolean | No | false |
 | Ignore errors | satellite_registration_command_ignore_subman_errors | Boolean | No | false |
 
+## Example:
+
+See satellite_register_example.yaml playbook.
+
 ## References:
 
 ##### Satellite documentation - Managing Hosts
