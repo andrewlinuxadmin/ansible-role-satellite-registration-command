@@ -1,0 +1,12 @@
+---
+satellite_registration_command_force_basic_auth: true
+satellite_registration_command_validate_certs: false
+
+satellite_registration_command_setup_insights: true
+satellite_registration_command_setup_remote_execution: true
+satellite_registration_command_insecure: true
+satellite_registration_command_token_life_time: 4
+satellite_registration_command_update_packages: false
+
+satellite_registration_command_force: false
+satellite_registration_command_ignore_subman_errors: false

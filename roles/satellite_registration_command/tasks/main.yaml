@@ -1,0 +1,79 @@
+---
+- name: Check variables
+  assert:
+    that:
+      - satellite_registration_command_url is defined
+      - satellite_registration_command_username is defined
+      - satellite_registration_command_password is defined
+      - satellite_registration_command_force_basic_auth is defined
+      - satellite_registration_command_validate_certs is defined
+      - (satellite_registration_command_organization_id is defined or satellite_registration_command_organization is defined)
+      - satellite_registration_command_location_id is defined or satellite_registration_command_location is defined
+      - satellite_registration_command_hostgroup_id is defined or satellite_registration_command_hostgroup is defined
+      - satellite_registration_command_setup_insights is defined
+      - satellite_registration_command_setup_remote_execution is defined
+      - satellite_registration_command_insecure is defined
+      - satellite_registration_command_token_life_time is defined
+      - satellite_registration_command_update_packages is defined
+      - satellite_registration_command_force is defined
+      - satellite_registration_command_ignore_subman_errors is defined
+    fail_msg: "Mandatory variables not defined"
+
+- name: Get Organization ID
+  include_tasks: get_organization_id.yaml
+  when: satellite_registration_command_organization_id is not defined and satellite_registration_command_organization is defined
+
+- name: Get Location ID
+  include_tasks: get_location_id.yaml
+  when: satellite_registration_command_location_id is not defined and satellite_registration_command_location is defined
+
+- name: Get Hostgroup ID
+  include_tasks: get_hostgroup_id.yaml
+  when: satellite_registration_command_hostgroup_id is not defined and satellite_registration_command_hostgroup is defined
+
+- name: Get operatingsystem ID
+  include_tasks: get_operatingsystem_id.yaml
+  when: satellite_registration_command_operatingsystem_id is not defined and satellite_registration_command_operatingsystem is defined
+
+- name: Get Lifecycle Environment ID
+  include_tasks: get_lifecycle_environment_id.yaml
+  when: satellite_registration_command_lifecycle_environment_id is not defined and satellite_registration_command_lifecycle_environment is defined
+
+- name: Get registration command from Satellite
+  uri:
+    url: "{{ satellite_registration_command_url }}/api/registration_commands"
+    user: "{{ satellite_registration_command_username }}"
+    password: "{{ satellite_registration_command_password }}"
+    force_basic_auth: "{{ satellite_registration_command_force_basic_auth }}"
+    validate_certs: "{{ satellite_registration_command_validate_certs }}"
+    method: "POST"
+    body_format: "json"
+    body:
+      registration_command:
+        organization_id: "{{ satellite_registration_command_organization_id }}"
+        location_id: "{{ satellite_registration_command_location_id }}"
+        hostgroup_id: "{{ satellite_registration_command_hostgroup_id }}"
+        operatingsystem_id: "{{ satellite_registration_command_operatingsystem_id | default(omit) }}"
+        smart_proxy_id: "{{ satellite_registration_command_smart_proxy_id | default(omit) }}"
+        setup_insights: "{{ satellite_registration_command_setup_insights }}"
+        setup_remote_execution: "{{ satellite_registration_command_setup_remote_execution }}"
+        insecure: "{{ satellite_registration_command_insecure }}"
+        jwt_expiration: "{{ satellite_registration_command_token_life_time }}"
+        packages: "{{ satellite_registration_command_packages | default(omit) }}"
+        update_packages: "{{ satellite_registration_command_update_packages }}"
+        repo: "{{ satellite_registration_command_repo | default(omit) }}"
+        repo_gpg_key_url: "{{ satellite_registration_command_repo_gpg_key_url | default(omit) }}"
+        activation_keys: "{{ satellite_registration_command_activation_keys | default(omit) }}"
+        lifecycle_environment_id: "{{ satellite_registration_command_lifecycle_environment_id | default(omit) }}"
+        force: "{{ satellite_registration_command_force }}"
+        ignore_subman_errors: "{{ satellite_registration_command_ignore_subman_errors }}"
+    status_code: 200
+  register: satellite_registration_command_result
+
+- name: Set registration command
+  set_fact:
+    satellite_registration_command: "{{ satellite_registration_command_result.json.registration_command }}"
+
+- name: Registration Command
+  debug:
+    msg: "{{ satellite_registration_command }}"

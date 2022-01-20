@@ -1,0 +1,23 @@
+---
+- name: Looking for Hostgroup ID
+  uri:
+    url: "{{ satellite_registration_command_url }}/api/hostgroups"
+    user: "{{ satellite_registration_command_username }}"
+    password: "{{ satellite_registration_command_password }}"
+    force_basic_auth: "{{ satellite_registration_command_force_basic_auth }}"
+    validate_certs: "{{ satellite_registration_command_validate_certs }}"
+    method: "GET"
+    body: "search=name={{ satellite_registration_command_hostgroup }}"
+    status_code: 200
+  register: satellite_registration_command_hostgroup_result
+  when: satellite_registration_command_hostgroup_id is not defined
+  
+- name: Checks if the hostgroup was found 
+  debug:
+    msg: "This task fails if the hostgroup was not found."
+  failed_when: satellite_registration_command_hostgroup_result.json.results | length == 0
+
+- name: Set Hostgroup ID if exists
+  set_fact:
+    satellite_registration_command_hostgroup_id: "{{ satellite_registration_command_hostgroup_result.json.results[0].id }}"
+  when: satellite_registration_command_hostgroup_result.json.results | length > 0

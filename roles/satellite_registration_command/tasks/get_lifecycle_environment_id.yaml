@@ -1,0 +1,23 @@
+---
+- name: Looking for Lifecycle Environment ID
+  uri:
+    url: "{{ satellite_registration_command_url }}/katello/api/environments"
+    user: "{{ satellite_registration_command_username }}"
+    password: "{{ satellite_registration_command_password }}"
+    force_basic_auth: "{{ satellite_registration_command_force_basic_auth }}"
+    validate_certs: "{{ satellite_registration_command_validate_certs }}"
+    method: "GET"
+    body: "search=name={{ satellite_registration_command_lifecycle_environment }}"
+    status_code: 200
+  register: satellite_registration_command_lifecycle_environment_result
+  when: satellite_registration_command_lifecycle_environment_id is not defined
+
+- name: Checks if the Lifecycle Environment was found 
+  debug:
+    msg: "This task fails if the Lifecycle Environment was not found."
+  failed_when: satellite_registration_command_lifecycle_environment_result.json.results | length == 0
+
+- name: Set Lifecycle Environment ID if exists
+  set_fact:
+    satellite_registration_command_lifecycle_environment_id: "{{ satellite_registration_command_lifecycle_environment_result.json.results[0].id }}"
+  when: satellite_registration_command_lifecycle_environment_result.json.results | length > 0
