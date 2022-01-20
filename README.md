@@ -1,4 +1,4 @@
-# Anbible role for Satellite Registration Command
+# Ansible role for Satellite Registration Command
 
 This Ansible role gets a Registration Command via Satellite API.
 
