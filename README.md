@@ -29,12 +29,17 @@ This Ansible role requests via the Satellite API the generation of this command 
 | Organization | satellite_registration_command_organization OR satellite_registration_command_organization_id | String | Yes |  |
 | Location | satellite_registration_command_location OR satellite_registration_command_location_id | String | Yes |  |
 | Host group | satellite_registration_command_hostgroup OR satellite_registration_command_hostgroup_id | String | Yes |  |
+| Operating system | satellite_registration_command_operatingsystem OR satellite_registration_command_operatingsystemp_id | String | No |  |
+| Lifecycle environment | satellite_registration_command_lifecycle_environment OR satellite_registration_command_lifecycle_environment_id | String | No |  |
+| Capsule | satellite_registration_command_smart_proxy_id | String | No |  |
 | Activation Keys | satellite_registration_command_activation_keys | Array | Yes if not present in the chosen host group configuration |  |
 | Setup Insights | satellite_registration_command_setup_insights | Boolean | No | true |
 | Setup Remote Execution | satellite_registration_command_setup_remote_execution | Boolean | No | true |
 | Insecure | satellite_registration_command_insecure | Boolean | No | true |
 | Token Life Time | satellite_registration_command_token_life_time | Integer | No | 4 |
 | Update Packages | satellite_registration_command_update_packages | Boolean | No | false |
+| Repository | satellite_registration_command_repo | String | No |  |
+| Repository GPG key URL | satellite_registration_command_repo_gpg_key_url | String | No |  |
 | Force | satellite_registration_command_force | Boolean | No | false |
 | Ignore errors | satellite_registration_command_ignore_subman_errors | Boolean | No | false |
 
