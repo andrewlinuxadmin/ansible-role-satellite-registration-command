@@ -25,7 +25,7 @@
     ansible_become: "yes"
   tasks:
     - name: Execute Satellite registration command
-      shell: "{{ hostvars['localhost']['satellite_registration_command'] }}"
+      shell: "export LANG=en && {{ hostvars['localhost']['satellite_registration_command'] }}"
       when: hostvars['localhost']['satellite_registration_command'] is defined
       register: satellite_registration_command_execution_result
 
